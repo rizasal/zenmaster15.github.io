@@ -1,17 +1,31 @@
 <html>
+    <head><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    </head>
      <body onload="yo();">
-       <canvas id="canvas" width="480" height="480"></canvas>
-       
+        <div class="container">
+            <div class="row">
+         <div class="typewriter"> <h1>Happy Birthday Dumboooooooooooooooooooooooooooooooooooooooooooo !!!!</h1></div>
+        </div>
+        <div class="row"> 
+         <div>            <canvas id="canvas" height="600" width="500"></canvas>
+          </div>
+        </div>  
+                
+        </div>
+     </div>
+     </div>
      </body>
+
+
 <script>
     var canvas = document.getElementById('canvas');
     if (canvas.getContext) {
         var ctx = canvas.getContext('2d');
     }
 
-var ballRadius=10;
+var ballRadius=5;
     var balls=[];
-    var ballnumber=20;
+    var ballnumber=100;
     var speed=4;
     var blocksize=ballRadius*2;
     var canvasw4=canvas.width/4;
@@ -20,11 +34,14 @@ var ballRadius=10;
     var blocks=[];
     var img=new Image();
     img.src="sam.jpg";
+    img.width="315";
+    img.height="500";
     
     
-    var blockrow=(((canvas.width/2)-canvasw4)*2)/blocksize;
-    var blockcol=((canvas.height/2-canvash4)*2)/blocksize;
-    
+    //var blockrow=(((canvas.width/2)-canvasw4)*2)/blocksize;
+    //var blockcol=((canvas.height/2-canvash4)*2)/blocksize;
+    var blockrow=img.width/blocksize;
+    var blockcol=img.height/blocksize;
 console.log(blockrow);
     
     function drawBlock(){
@@ -82,7 +99,7 @@ console.log(blockrow);
     function drawBall() {
       for(var i=0;i<ballnumber;i+=1){
       ctx.beginPath();
-        var xx=10+(i*(canvas.width/ballnumber));
+        var xx=10+(i*(canvas.width/ballnumber)) * ((Math.random()*2)-1);
       ctx.arc(xx,canvas.height - 20,ballRadius,0,Math.PI*2);
       balls.push({x:xx, y:canvas.height-20, dx:(Math.random()*speed*2)-speed, dy:(Math.random()*speed*2)-speed});
       ctx.fillStyle = "#0095DD";
