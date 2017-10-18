@@ -1,0 +1,128 @@
+<html>
+     <body onload="yo();">
+       <canvas id="canvas" width="480" height="480"></canvas>
+       
+     </body>
+<script>
+    var canvas = document.getElementById('canvas');
+    if (canvas.getContext) {
+        var ctx = canvas.getContext('2d');
+    }
+
+var ballRadius=10;
+    var balls=[];
+    var ballnumber=20;
+    var speed=4;
+    var blocksize=ballRadius*2;
+    var canvasw4=canvas.width/4;
+    var canvash4=canvas.height/4;
+    
+    var blocks=[];
+    var img=new Image();
+    img.src="sam.jpg";
+    
+    
+    var blockrow=(((canvas.width/2)-canvasw4)*2)/blocksize;
+    var blockcol=((canvas.height/2-canvash4)*2)/blocksize;
+    
+console.log(blockrow);
+    
+    function drawBlock(){
+      for(var i=0;i<blockrow;i+=1){
+          blocks[i]=[];
+        for (var j=0;j<blockcol;j+=1){
+          ctx.beginPath();
+          var xx=(j*blocksize)+canvasw4;
+          var yy=(i*blocksize)+canvash4;
+          blocks[i][j]={x:xx,y:yy, status:1 };
+          ctx.fillStyle="#eeee0"
+          ctx.rect(xx,yy,blocksize,blocksize);
+          ctx.fill();
+          ctx.closePath();
+        }
+      }
+    }
+    function updateBlock(){
+        for(var i=0;i<blockrow;i+=1){
+        for (var j=0;j<blockcol;j+=1){
+            var b=blocks[i][j];
+          if(b.status==1){
+          ctx.beginPath();   
+          ctx.fillStyle="#eeee0"
+          ctx.rect(blocks[i][j].x,blocks[i][j].y,blocksize,blocksize);
+          ctx.fill();
+          ctx.closePath();
+        }
+        }
+
+    }
+    }
+    function findCollisions(){
+        for(var i=0;i<ballnumber;i+=1){
+            var xx=balls[i].x;
+            var yy=balls[i].y;
+
+            for(var r=0;r<blockrow;r+=1){
+                for(var c=0; c<blockcol; c+=1){
+                    if(blocks[r][c].status==1){
+                    var blockx=blocks[r][c].x;
+                    var blocky=blocks[r][c].y;
+                    if(xx > (blockx) && xx < blockx+blocksize && yy>blocky && yy<blocky+blocksize){
+                        balls[i].dx*=-1;
+                        balls[i].dy*=-1;
+
+                        blocks[r][c].status=0;
+                    }
+                    }
+                }
+            }
+        }
+    }
+
+    function drawBall() {
+      for(var i=0;i<ballnumber;i+=1){
+      ctx.beginPath();
+        var xx=10+(i*(canvas.width/ballnumber));
+      ctx.arc(xx,canvas.height - 20,ballRadius,0,Math.PI*2);
+      balls.push({x:xx, y:canvas.height-20, dx:(Math.random()*speed*2)-speed, dy:(Math.random()*speed*2)-speed});
+      ctx.fillStyle = "#0095DD";
+      ctx.fill();
+    
+      ctx.closePath();
+      
+      }
+      
+    } 
+    
+    function updateBall(){
+      for (var i=0;i<ballnumber;i+=1){
+        ctx.beginPath();
+        balls[i].x+=balls[i].dx;
+        balls[i].y+=balls[i].dy;
+        if(balls[i].x>canvas.width || balls[i].x<0)
+          balls[i].dx*=-1;
+        
+        if(balls[i].y>canvas.height || balls[i].y<0)
+          balls[i].dy*=-1;
+        ctx.arc(balls[i].x,balls[i].y,ballRadius,0,Math.PI*2);
+        ctx.fillStyle = "#0095DD";
+        ctx.fill();
+    
+        ctx.closePath();
+      }
+    }
+    drawBall();
+    drawBlock();
+    function draw(){
+      ctx.clearRect(0,0, canvas.width,canvas.height);
+      ctx.drawImage(img,canvasw4,canvash4,canvas.width/2,canvas.height/2);
+      updateBall();
+      updateBlock();
+      findCollisions();
+      
+    }
+    setInterval(draw,10);</script>
+
+
+    </html>
+    
